@@ -98,17 +98,32 @@ Or open the report file manually: `playwright-report/index.html` (created after 
 
 ## Project Structure
 
+The tests use the **Page Object Model (POM)** to keep selectors and page interactions in reusable classes; specs focus on test flow and assertions.
+
 ```
 SiteGroundTask/
-├── playwright.config.ts    # Playwright configuration
+├── playwright.config.ts       # Playwright configuration
 ├── package.json
 ├── tsconfig.json
-├── README.md                # This file
+├── README.md                  # This file
 └── tests/
-    ├── fixtures.ts          # Test fixtures and HOME_URL with demo token
-    ├── email-accounts.spec.ts   # TC#1
-    └── email-forwarder.spec.ts  # TC#2
+    ├── fixtures.ts            # Test fixtures and HOME_URL with demo token
+    ├── email-accounts.spec.ts # TC#1 – Add email account
+    ├── email-forwarder.spec.ts # TC#2 – Add empty email forwarder
+    └── pages/                 # Page objects
+        ├── index.ts           # Re-exports all page objects
+        ├── HomePage.ts        # Home page: navigation (Email → Accounts / Forwarders)
+        ├── EmailAccountsPage.ts   # Email Accounts: domain, form, table
+        └── EmailForwardersPage.ts # Email Forwarders: domain, form, validation
 ```
+
+### Page objects
+
+- **HomePage** – `goto()`, `openEmailAccounts()`, `openEmailForwarders()` for navigation.
+- **EmailAccountsPage** – Domain dropdown, account name/password inputs, Generate/Create, success message, and accounts table.
+- **EmailForwardersPage** – Domain dropdown, “Forward to” input, Create button, and validation errors.
+
+Specs instantiate these with the Playwright `page` and call their methods; assertions remain in the test files.
 
 ## Application Under Test
 
